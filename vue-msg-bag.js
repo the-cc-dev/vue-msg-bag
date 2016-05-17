@@ -5,9 +5,9 @@
  */
 module.exports = (function () {
 
-    var _ctx = null;
-
     function MsgBag(options) {
+        this.set = false;
+
         this.msgs = [];
 
         this.options = {
@@ -56,9 +56,10 @@ module.exports = (function () {
     }
 
     MsgBag.prototype.context = function(ctx) {
-        if (ctx) { _ctx = ctx; }
-
-        return _ctx;
+        if ( ! this.set) {
+            ctx[ctx.set ? 'set' : '$set']('__msgBag', this);
+            this.set = true;
+        }
     };
 
     MsgBag.prototype.success = function(msg, container) {

@@ -13,8 +13,6 @@ The default objects stored in the message bag (if not parsed) will contain three
 
 To tweak the msg stored in the message bag check the `parseMsg` option below.
 
-We can watch changes in the message bag by simply watching the `$msgBag` object in the root of the app.
-
 ~~~
 <template>
     <div>
@@ -25,16 +23,6 @@ We can watch changes in the message bag by simply watching the `$msgBag` object 
 
     <router-view></router-view>
 </template>
-
-<script> 
-    export default {
-        data() {
-            return {
-                $msgBag: this.$msgBag
-            };
-        }
-    }
-</script>
 ~~~
 
 In the above example the messages will automatically clear after some timeout (which can be set in options).

@@ -9,12 +9,12 @@
   "description": "Simple message bag plugin for Vue.js.",
   "licenses": "MIT, GPL",
   "devDependencies": {},
-  "keywords": ["msg", "bag", "message", "msging", "error", "success", "warning", "fatal", "queue", "display"],
+  "keywords": ["vue", "vue.js", "msg", "bag", "message", "msging", "error", "success", "warning", "fatal", "queue", "display"],
   "main": "vue-msg-bag.js",
   "name": "vue-msg-bag",
   "repository": {
     "type": "git",
     "url": "https://github.com/websanova/vue-msg-bag"
   },
-  "version": "0.1.0"
+  "version": "0.2.0"
 }
