@@ -63,13 +63,20 @@ this.$msgBag.clear();
 this.$msgBag.clear(msg);
 ~~~
 
-
 `**all**`
 
 Get all the messages.
 
 ~~~
 this.$msgBag.all();
+~~~
+
+`**parse**`
+
+Manually parse a message without using any queues.
+
+~~~
+var msgs = this.$msgBag.parse('error', msg);
 ~~~
 
 

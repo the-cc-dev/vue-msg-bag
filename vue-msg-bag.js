@@ -1,7 +1,7 @@
 /*
     https://github.com/websanova/vue-msg-bag
     rob@websanova.com
-    Version 0.1.0
+    Version 0.3.0
  */
 module.exports = (function () {
 
@@ -13,36 +13,49 @@ module.exports = (function () {
         this.options = {
             timeout:   options.timeout   || 1500,
             container: options.container || 'main',
-            parseMsg:  options.parseMsg  || _parseMsg
+            parseMsg:  options.parseMsg  || function (msg) { return msg; }
         };
     }
 
     function _parseMsg(msg) {
+        msg = this.options.parseMsg.call(this, msg);
+
+        msg.__msgId = Math.random();
+
         return msg;
     }
 
-    function _display(type, msg, container) {
-        var i, ii;
+    function _display(type, msg, container, msgs, queue) {
+        var i, ii,
+            msgs = msgs || [];
+
+        queue = queue === false ? false : true;
 
         if (msg && msg.constructor === Array) {
             for (i = 0, ii = msg.length; i < ii; i++) {
-                _display.call(this, type, msg[i], container);
+                msgs = _display.call(this, type, msg[i], container, msgs, queue);
             }
         }
         else if (typeof msg === 'Object') {
-            _queue.call(this, msg);
+            msgs.push(_parseMsg.call(this, msg))
+
+            if (queue) {
+                _queue.call(this, msgs[msgs.length - 1]);
+            }
         }
         else {
-            _queue.call(this, {msg: msg, type: type, container: container || this.options.container});
+            msgs.push(_parseMsg.call(this, {msg: msg, type: type, container: container || this.options.container}));
+            
+            if (queue) {
+                _queue.call(this, msgs[msgs.length - 1]);
+            }
         }
+
+        return msgs;
     }
 
     function _queue(msg) {
         var _this = this;
-
-        msg = this.options.parseMsg.call(this, msg);
-
-        msg.__msgId = Math.random();
 
         this.msgs.unshift(msg);
 
@@ -76,6 +89,10 @@ module.exports = (function () {
 
     MsgBag.prototype.fatal = function(msg, container) {
         _display.call(this, 'fatal', msg, container);
+    };
+
+    MsgBag.prototype.parse = function(type, msg) {
+        return _display.call(this, type, msg, null, [], false);
     };
 
     MsgBag.prototype.clear = function(msg) {
